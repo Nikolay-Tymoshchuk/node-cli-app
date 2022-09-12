@@ -2,8 +2,15 @@ const fs = require('fs').promises;
 const path = require('path');
 import { uid } from 'uid';
 
+// find the relative path to the database file
+
 const contactsPath = path.normalize('db/contacts.json');
 
+// =================================================> GET ALL CONTACTS
+/**
+ * @returns {array}
+ * function of getting all contacts in data base. Return parsed result.
+ */
 async function listContacts() {
   try {
     const contactsList = await fs.readFile(contactsPath, 'utf-8');
@@ -13,6 +20,13 @@ async function listContacts() {
   }
 }
 
+// =================================================>FIND CONTACT BY ID
+/**
+ *
+ * @param {string} contactId
+ * @returns {object}
+ * function of searching contact by ID in data base.
+ */
 async function getContactById(contactId) {
   try {
     const contactList = await listContacts();
@@ -22,6 +36,13 @@ async function getContactById(contactId) {
   }
 }
 
+// ===================================================>DELETE CONTACT BY ID
+/**
+ *
+ * @param {string} contactId
+ * function of deleting contact by ID in data base.
+ * Overrides data in data base
+ */
 async function removeContact(contactId) {
   try {
     const list = await listContacts();
@@ -34,6 +55,16 @@ async function removeContact(contactId) {
   }
 }
 
+// =====================================================>ADD CONTACT
+/**
+ *
+ * @param {string} name - name of user
+ * @param {string} email - email of user
+ * @param {string} phone - phone number of user
+ *
+ * function of adding new contact to data base. Generates id with uid library.
+ * Overrides data in data base
+ */
 async function addContact(name, email, phone) {
   try {
     const newContact = {
@@ -50,8 +81,6 @@ async function addContact(name, email, phone) {
   }
 }
 
-module.exports {
-	listContacts,
-		getContactById,
-		
-}
+// Export functions for manipulations with contacts list
+
+export { listContacts, getContactById, removeContact, addContact };
