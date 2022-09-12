@@ -1,13 +1,7 @@
 const argv = require('yargs').argv;
 const fs = require('fs/promises');
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  contactsPath,
-} = require('./contacts.js');
-listContacts();
+
+const { listContacts, getContactById, removeContact, addContact } = require('./contacts.js');
 
 function invokeAction({ action, id, name, email, phone }) {
   switch (action) {

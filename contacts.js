@@ -8,13 +8,17 @@ const contactsPath = path.normalize('db/contacts.json');
 
 // =================================================> GET ALL CONTACTS
 /**
- * @returns {object}
+ * @returns {object} parsed array of contacts.
+ *
  * function of getting all contacts in data base. Return parsed result.
  */
 async function listContacts() {
   try {
     const contactsList = await fs.readFile(contactsPath, 'utf-8');
-    return JSON.parse(contactsList);
+    const parsedContactsList = JSON.parse(contactsList);
+
+    if (parsedContactsList.length >= 1) return parsedContactsList;
+    throw new Error('Contacts list is empty');
   } catch (err) {
     console.error(err);
   }
@@ -23,8 +27,9 @@ async function listContacts() {
 // =================================================>FIND CONTACT BY ID
 /**
  *
- * @param {string} contactId
- * @returns {object}
+ * @param {number} contactId
+ * @returns {object} single contact data.
+ *
  * function of searching contact by ID in data base.
  */
 async function getContactById(contactId) {
@@ -39,7 +44,9 @@ async function getContactById(contactId) {
 // ===================================================>DELETE CONTACT BY ID
 /**
  *
- * @param {string} contactId
+ * @param {number} contactId
+ * @return {object} parsed array of contacts.
+ *
  * function of deleting contact by ID in data base.
  * Overrides data in data base
  */
@@ -76,7 +83,7 @@ async function addContact(name, email, phone) {
       phone,
     };
     const previousList = await listContacts();
-    const newList = await JSON.stringify([...previousList, newContact]);
+    const newList = JSON.stringify([...previousList, newContact]);
     fs.writeFile(contactsPath, newList);
     return listContacts();
   } catch (err) {
@@ -86,4 +93,4 @@ async function addContact(name, email, phone) {
 
 // Export functions for manipulations with contacts list
 
-module.exports = { listContacts, getContactById, removeContact, addContact, contactsPath };
+module.exports = { listContacts, getContactById, removeContact, addContact };
